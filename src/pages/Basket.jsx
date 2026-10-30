@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { rpc } from '../supabase.js';
 import { BasketArt, Candy, Rainbow } from '../art.jsx';
-import { StickerTitle, Toasts, GhostCrowd, EmojiBar, LivePill } from '../ui.jsx';
+import { StickerTitle, Toasts, GhostCrowd, EmojiBar, LivePill, HowButton } from '../ui.jsx';
 import { useLive, useActs, useToasts, sendAct } from '../live.js';
 import { deviceId, ownerKey, saveOwned, useServerClock, fmtLeft, openLabel, errMsg, CANDY_NAMES } from '../lib.js';
 import { makeStory, shareOrDownload } from '../story.js';
 import NotFound from './NotFound.jsx';
 import AlertButton from '../AlertButton.jsx';
 
-export default function Basket({ me }) {
+export default function Basket({ me, openHow }) {
   const { slug } = useParams();
   const nav = useNavigate();
   const loc = useLocation();
@@ -79,6 +79,13 @@ export default function Basket({ me }) {
         <StickerTitle size={32}>{b.owner_name}의 사탕 바구니</StickerTitle>
         <p className="sub">{opened ? '바구니가 열렸어요!' : `${openLabel(b.open_at)}에 열려요 · ${fmtLeft(openAt - now)} 남음`}</p>
         {b.is_official && <span className="badge big">호박마을 주민</span>}
+        {!isOwner && !opened && (
+          <div className="visit-card">
+            <p className="key-msg">🍬 사탕 안에 <b>쪽지</b>를 담아 넣어주세요<br />할로윈이 끝나는 {openLabel(b.open_at)}에<br /><b>{b.owner_name}</b>만 열어볼 수 있어요</p>
+            <button type="button" className="btn-main" onClick={() => nav(`/b/${slug}/write`)}>쪽지 사탕 넣어주기</button>
+            <HowButton onClick={openHow} />
+          </div>
+        )}
         {isOwner && !opened && <div className="alert-slot"><AlertButton slug={slug} ownerKey={ownerKey(slug)} /></div>}
       </div>
 
@@ -96,7 +103,7 @@ export default function Basket({ me }) {
             <>
               <button type="button" className="btn-main" onClick={() => nav(`/b/${slug}/share`)}>친구들한테 링크 보내기</button>
               <div className="owner-row">
-                <span className="hint">쪽지는 {openLabel(b.open_at)}에 나만 열 수 있어요</span>
+                <span className="hint">지금 보이는 화면은 바구니 주인 화면이에요. 친구가 링크를 열면 바로 쪽지 사탕을 넣는 화면이 보여요</span>
                 <button type="button" className="btn-text" onClick={togglePublic}>{b.is_public ? '마을에서 내리기' : '마을에 올리기'}</button>
               </div>
             </>
@@ -107,8 +114,7 @@ export default function Basket({ me }) {
             </>
           ) : (
             <>
-              <button type="button" className="btn-main" onClick={() => nav(`/b/${slug}/write`)}>사탕 넣어주기</button>
-              <p className="hint center">쪽지는 바구니 주인만 열어볼 수 있어요</p>
+              <Link className="btn-sub center" to="/new">나도 내 바구니 만들기</Link>
             </>
           )}
         </div>

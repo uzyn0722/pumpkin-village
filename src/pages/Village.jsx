@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { rpc } from '../supabase.js';
 import { Pumpkin, Ghost, Rainbow, Flower } from '../art.jsx';
-import { StickerTitle, Toasts, NameTag, EmojiBar, EMOJIS } from '../ui.jsx';
+import { StickerTitle, Toasts, NameTag, EmojiBar, EMOJIS, HowButton } from '../ui.jsx';
 import { useLive, useActs, useToasts, sendAct } from '../live.js';
 import { deviceId, ownedKeys, neighbors, useServerClock, fmtLeft, openLabel, hashNum } from '../lib.js';
 
-export default function Village({ me, openPicker }) {
+export default function Village({ me, openPicker, openHow }) {
   const nav = useNavigate();
   const [list, setList] = useState([]);
   const [stats, setStats] = useState(null);
@@ -81,7 +81,8 @@ export default function Village({ me, openPicker }) {
             <span className="cc-time">{opened ? '열렸어요!' : openAt ? fmtLeft(openAt - now) : '…'}</span>
           </div>
         </div>
-        <p className="sub center">{stats ? `${openLabel(stats.open_at)}, 마을의 모든 바구니가 한꺼번에 열려요` : ' '}</p>
+        <p className="key-msg center">🍬 사탕 하나 = 친구가 보낸 <b>비밀 쪽지</b><br />할로윈이 끝나는 <b>{stats ? openLabel(stats.open_at) : '11월 1일 0시'}</b>, 다 같이 열어봐요</p>
+        <div className="center"><HowButton onClick={openHow} /></div>
 
         {(mySlugs.length > 0 || near.length > 0) && (
           <div className="chips" aria-label="내 바구니와 이웃">

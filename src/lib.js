@@ -29,7 +29,7 @@ export function getMe() { return lsGet('pv_me', null); }
 export function saveMe(me) { lsSet('pv_me', me); }
 export function ensureMe() {
   let me = getMe();
-  if (!me) { me = { nick: randomNick(), ghost: 1 + Math.floor(Math.random() * 4), picked: false }; saveMe(me); }
+  if (!me) { me = { nick: randomNick(), ghost: 1 + Math.floor(Math.random() * 4), picked: true }; saveMe(me); }
   return me;
 }
 

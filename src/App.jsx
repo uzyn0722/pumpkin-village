@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Sprites, Heart, Sparkle } from './art.jsx';
-import { GhostPicker } from './ui.jsx';
+import { GhostPicker, HowSheet } from './ui.jsx';
 import { ensureMe, saveMe, deviceId } from './lib.js';
 import { rpc } from './supabase.js';
 import Village from './pages/Village.jsx';
@@ -26,7 +26,8 @@ export default function App() {
   useEffect(() => { rpc('log_visit', { p_device: deviceId() }).catch(() => {}); }, []);
 
   const updateMe = (next) => { const m = { ...me, ...next }; saveMe(m); setMe(m); setPicker(false); };
-  const ctx = { me, openPicker: () => setPicker(true) };
+  const [how, setHow] = useState(false);
+  const ctx = { me, openPicker: () => setPicker(true), openHow: () => setHow(true) };
 
   return (
     <div className="app">
@@ -46,9 +47,8 @@ export default function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!isAdmin && (picker || !me.picked) && (
-        <GhostPicker me={me} onSave={updateMe} onClose={me.picked ? () => setPicker(false) : null} />
-      )}
+      {!isAdmin && picker && <GhostPicker me={me} onSave={updateMe} onClose={() => setPicker(false)} />}
+      {!isAdmin && how && <HowSheet onClose={() => setHow(false)} />}
     </div>
   );
 }

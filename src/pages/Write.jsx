@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { rpc } from '../supabase.js';
-import { Candy } from '../art.jsx';
+import { Candy, Ghost } from '../art.jsx';
 import { StickerTitle } from '../ui.jsx';
 import { sendAct, useLive } from '../live.js';
 import { addNeighbor, errMsg, CANDY_NAMES } from '../lib.js';
 
-export default function Write({ me }) {
+export default function Write({ me, openPicker }) {
   const { slug } = useParams();
   const nav = useNavigate();
   useLive(me, slug);
   const [b, setB] = useState(null);
   const [type, setType] = useState(1);
   const [msg, setMsg] = useState('');
-  const [mode, setMode] = useState('nick');
+  const [mode, setMode] = useState('anon');
   const [nick, setNick] = useState('');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
@@ -41,7 +41,8 @@ export default function Write({ me }) {
         <Link to={`/b/${slug}`} className="pill back">← 바구니로</Link>
         <span className="muted nowrap">{b ? `${b.owner_name}의 사탕 바구니` : ''}</span>
       </div>
-      <StickerTitle size={30}>어떤 사탕을 넣어줄까요?</StickerTitle>
+      <StickerTitle size={27}>사탕에 쪽지를 담아주세요</StickerTitle>
+      <p className="sub center">할로윈이 끝나는 11월 1일 0시에 {b ? b.owner_name : '바구니 주인'}만 열어볼 수 있어요</p>
       <form className="stack" onSubmit={submit}>
         <div className="candy-pick">
           {[1, 2, 3, 4].map((t) => (
@@ -59,8 +60,8 @@ export default function Write({ me }) {
         <div className="stack-tight">
           <span className="field-label">어떻게 전할까요?</span>
           <div className="seg">
-            <button type="button" className={mode === 'nick' ? 'on' : ''} onClick={() => setMode('nick')}>닉네임으로</button>
-            <button type="button" className={mode === 'anon' ? 'on' : ''} onClick={() => setMode('anon')}>익명 유령으로</button>
+            <button type="button" className={mode === 'anon' ? 'on' : ''} onClick={() => setMode('anon')}>유령 이름으로</button>
+            <button type="button" className={mode === 'nick' ? 'on' : ''} onClick={() => setMode('nick')}>내 이름 쓰기</button>
           </div>
           {mode === 'nick' ? (
             <>
@@ -68,7 +69,11 @@ export default function Write({ me }) {
               <input id="nick" className="input" maxLength={12} value={nick} onChange={(e) => setNick(e.target.value)} placeholder="보내는 사람 (예: 같은 반 민지)" autoComplete="off" />
             </>
           ) : (
-            <p className="anon-note">‘{me.nick}’ 이름으로 전해져요. 누가 보냈는지는 아무도 몰라요 👻</p>
+            <div className="anon-note">
+              <Ghost v={me.ghost || 1} size={40} />
+              <span>내 유령 이름 <b className="nowrap">‘{me.nick}’</b>으로 전해져요. 누가 보냈는지는 아무도 몰라요</span>
+              <button type="button" className="btn-ghost small" onClick={openPicker}>바꾸기</button>
+            </div>
           )}
           {type === 3 && <p className="hint">💌 고백도 익명으로 할 수 있어요. 자정에 바구니가 열릴 때 전해져요</p>}
         </div>
