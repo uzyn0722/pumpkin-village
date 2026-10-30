@@ -65,7 +65,7 @@ export default function Village({ me, openPicker, openHow }) {
       <header className="v-head wrap">
         <div className="logo">
           <span className="logo-en">Halloween</span>
-          <StickerTitle size={40}>호박마을</StickerTitle>
+          <h1 className="logo-ko" aria-label="호박마을"><span className="lk-back" aria-hidden="true">호박마을</span><span className="lk-front" aria-hidden="true">호박마을</span></h1>
         </div>
         <span className="pill live-pill"><span className="dot" />{online}명 마을에 있어요</span>
       </header>

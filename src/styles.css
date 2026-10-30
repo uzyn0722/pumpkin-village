@@ -54,7 +54,6 @@ a { color: var(--yellow); }
   font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: #FFD84A; margin: 6px 0 2px;
   line-height: 1.25; letter-spacing: -.02em; padding: 0; word-break: keep-all;
 }
-.logo .sticker-title { color: #FF6FAE; }
 .sub { margin: 0; color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1.55; }
 .hint { margin: 4px 0 0; color: #8E7F96; font-size: 12.5px; line-height: 1.5; }
 .card .hint, .sheet .hint { color: #7A6B7F; }
@@ -328,3 +327,9 @@ a { color: var(--yellow); }
 .pv-pill { margin: 10px auto 0; display: block; background: var(--night2); color: var(--cream); border: 2px dashed #FFC93C; border-radius: 999px; padding: 9px 16px; font-size: 13.5px; font-weight: 800; cursor: pointer; white-space: nowrap; }
 .pv-pill.on { background: #FFC93C; color: #1B1230; border-style: solid; animation: bob 2.4s ease-in-out infinite; }
 .sheet.preview-card { max-width: 480px; margin: 0; border: 3px solid var(--night3); }
+
+/* village logo: blue sticker outline (kept) */
+.logo-ko { margin: 0; font-family: var(--display); font-weight: 400; font-size: 40px; line-height: 1.25; letter-spacing: 1px; display: grid; padding: .1em .08em .14em; }
+.logo-ko > span { grid-area: 1 / 1; position: relative; }
+.lk-back { color: var(--blue); -webkit-text-stroke: .14em var(--blue); filter: drop-shadow(0 .07em 0 #0D0820); }
+.lk-front { color: #FF6FAE; }
