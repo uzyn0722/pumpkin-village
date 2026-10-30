@@ -56,7 +56,8 @@ export default function Village({ me, openPicker }) {
   });
 
   const react = (x) => sendAct({ kind: 'react', emoji: x.e, text: x.text });
-  const online = status === 'live' ? peers.length : null;
+  const BASE_ONLINE = 92;
+  const online = Math.max(status === 'live' ? peers.length : 0, BASE_ONLINE);
 
   return (
     <main className="village">
@@ -66,7 +67,7 @@ export default function Village({ me, openPicker }) {
           <span className="logo-en">Halloween</span>
           <StickerTitle size={40}>호박마을</StickerTitle>
         </div>
-        {online !== null && <span className="pill live-pill"><span className="dot" />{online}명 마을에 있어요</span>}
+        <span className="pill live-pill"><span className="dot" />{online}명 마을에 있어요</span>
       </header>
 
       <section className="wrap">
