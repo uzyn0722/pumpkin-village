@@ -83,7 +83,7 @@ export default function Basket({ me }) {
       </div>
 
       <section className="stage">
-        <Rainbow width={520} height={150} className="stage-rainbow" />
+        <Rainbow width={520} height={260} className="stage-rainbow" />
         <div className="stage-basket"><BasketArt style={b.style} count={b.candy_count} size={230} /></div>
         <div className="stage-count"><span className="count-chip">🔒 사탕 {b.candy_count}개</span></div>
         <GhostCrowd peers={crowd} myKey={myKey} floats={floats} />

@@ -14,9 +14,7 @@ function svgImage(inner, w, h) {
 const use = (id, x, y, w, h, rot = 0) => `<g transform="translate(${x} ${y}) rotate(${rot} ${w / 2} ${h / 2})"><use href="#${id}" xlink:href="#${id}" width="${w}" height="${h}"/></g>`;
 
 function basketSvg(style) {
-  return `<path d="M44 120Q120 -10 196 120" stroke="#2B7BE4" stroke-width="20" fill="none" stroke-linecap="round"/>
-  <path d="M44 120Q120 -10 196 120" stroke="#FF5FA2" stroke-width="9" fill="none" stroke-linecap="round"/>
-  ${use('ck3', 58, 66, 64, 55, -18)}${use('ck2', 116, 56, 62, 54, 14)}${use('ck1', 88, 78, 70, 60)}
+  return `${use('ck3', 58, 66, 64, 55, -18)}${use('ck2', 116, 56, 62, 54, 14)}${use('ck1', 88, 78, 70, 60)}
   ${use(`pk${style}`, 8, 96, 224, 188)}`;
 }
 

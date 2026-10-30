@@ -11,7 +11,7 @@ export default function Done({ me }) {
 
   return (
     <main className="wrap page done">
-      <Rainbow width={480} height={150} className="done-rainbow" />
+      <Rainbow width={480} height={230} className="done-rainbow" />
       <StickerTitle size={84} className="center">쏙!</StickerTitle>
       <div className="done-art">
         <span className="done-candy"><Candy t={st.type || 3} size={64} /></span>

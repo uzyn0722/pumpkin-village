@@ -125,7 +125,7 @@ export default function Village({ me, openPicker }) {
             );
           })}
         </div>
-        <Rainbow width={600} height={110} className="map-rainbow" />
+        <Rainbow width={600} height={240} className="map-rainbow" />
         <Flower size={44} className="map-flower" />
       </section>
 

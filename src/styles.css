@@ -202,9 +202,9 @@ a { color: var(--yellow); }
 .basket { padding: 16px 0 260px; }
 .basket .center { display: flex; flex-direction: column; align-items: center; }
 .stage { position: relative; max-width: 620px; height: 470px; margin: 0 auto; overflow: hidden; }
-.stage-rainbow { position: absolute; left: 0; right: 0; bottom: 70px; }
+.stage-rainbow { position: absolute; left: 0; right: 0; bottom: 60px; }
 .stage-basket { position: absolute; left: 50%; top: 40px; transform: translateX(-50%); }
-.stage-count { position: absolute; left: 0; right: 0; top: 318px; display: flex; justify-content: center; z-index: 2; }
+.stage-count { position: absolute; left: 0; right: 0; top: 262px; display: flex; justify-content: center; z-index: 2; }
 .count-chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 999px; background: var(--yellow); color: var(--ink); border: 3px solid var(--blue); font-family: var(--display); font-size: 17px; white-space: nowrap; }
 .count-chip b { color: var(--red); font-weight: 400; }
 .crowd { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
@@ -251,7 +251,7 @@ a { color: var(--yellow); }
 
 /* done */
 .done { position: relative; }
-.done-rainbow { position: absolute; left: 0; right: 0; top: 250px; opacity: .85; pointer-events: none; }
+.done-rainbow { position: absolute; left: 0; right: 0; top: 170px; opacity: .85; pointer-events: none; }
 .done > :not(.done-rainbow) { position: relative; }
 .done .sticker-title { position: relative; margin-top: 10px; }
 .done-art { position: relative; display: flex; justify-content: center; height: 210px; }

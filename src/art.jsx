@@ -19,8 +19,9 @@ export const Heart = ({ size = 14, ...p }) => <Use id="hrt" w={size} h={Math.rou
 export const Sparkle = ({ size = 18, ...p }) => <Use id="spk" w={size} h={size} {...p} />;
 export const Flower = ({ size = 40, ...p }) => <Use id="flw" w={size} h={size} {...p} />;
 
+// Full semicircle that always fits inside its box (no flat cut at the top).
 export function Rainbow({ width = 390, height = 120, className, style }) {
-  const cx = width / 2; const base = height + 20; const r0 = Math.min(width * 0.6, 260);
+  const cx = width / 2; const base = height + 2; const r0 = Math.min(width / 2 - 12, height - 12);
   const cols = ['#FF4B3E', '#FF8A2E', '#FFC93C', '#3FBF6A', '#2B7BE4'];
   return (
     <svg className={className} style={style} width="100%" height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMax meet" aria-hidden="true">
@@ -34,16 +35,12 @@ export function Rainbow({ width = 390, height = 120, className, style }) {
 
 export function BasketArt({ style = 1, count = 0, size = 240 }) {
   const n = Math.min(3, count === 0 ? 0 : count < 3 ? 1 : count < 8 ? 2 : 3);
-  const s = size / 240;
   return (
-    <svg width={size} height={Math.round(size * 290 / 240)} viewBox="0 0 240 290" aria-hidden="true">
-      <path d="M44 120Q120 -10 196 120" stroke="#2B7BE4" strokeWidth="20" fill="none" strokeLinecap="round" />
-      <path d="M44 120Q120 -10 196 120" stroke="#FF5FA2" strokeWidth="9" fill="none" strokeLinecap="round" />
+    <svg width={size} height={Math.round(size * 240 / 240)} viewBox="0 48 240 240" aria-hidden="true">
       {n >= 2 && <g transform="translate(58 66) rotate(-18 30 26)"><use href="#ck3" width="64" height="55" /></g>}
       {n >= 3 && <g transform="translate(116 56) rotate(14 30 26)"><use href="#ck2" width="62" height="54" /></g>}
       {n >= 1 && <g transform="translate(88 78)"><use href="#ck1" width="70" height="60" /></g>}
       <use href={`#pk${style}`} x="8" y="96" width="224" height="188" />
-      {s < 0 && null}
     </svg>
   );
 }
