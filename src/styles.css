@@ -52,8 +52,11 @@ a { color: var(--yellow); }
 
 .sticker-title {
   font-family: var(--display); font-weight: 400; color: var(--pink); margin: 6px 0 2px;
-  line-height: 1.25; letter-spacing: .5px; padding: 6px;
+  line-height: 1.25; letter-spacing: 1px; padding: .14em .12em .2em; display: grid;
 }
+.sticker-title > span { grid-area: 1 / 1; position: relative; }
+.st-back { color: var(--blue); -webkit-text-stroke: .22em var(--blue); filter: drop-shadow(0 .09em 0 #0D0820); }
+.st-front { color: #FF6FAE; }
 .sub { margin: 0; color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1.55; }
 .hint { margin: 4px 0 0; color: #8E7F96; font-size: 12.5px; line-height: 1.5; }
 .card .hint, .sheet .hint { color: #7A6B7F; }
@@ -312,3 +315,18 @@ a { color: var(--yellow); }
 .anon-note { display: flex; align-items: center; gap: 10px; word-break: keep-all; }
 .anon-note span { flex: 1; }
 .anon-note .btn-ghost.small, .btn-ghost.small { height: 36px; font-size: 13px; }
+
+/* referral preview */
+.preview-card { margin: 12px auto 0; max-width: 420px; padding: 14px 16px; border-radius: 20px; background: var(--night2); border: 3px dashed #FFC93C; display: flex; flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
+.pv-title { font-size: 15px; line-height: 1.5; color: var(--cream); word-break: keep-all; }
+.pv-dots { display: flex; justify-content: center; align-items: center; gap: 8px; }
+.pv-dots span:not(.pv-num) { width: 38px; height: 38px; border-radius: 50%; border: 3px dashed var(--night3); display: inline-flex; align-items: center; justify-content: center; font-size: 20px; }
+.pv-dots span.on { border: 3px solid #FFC93C; background: #FFC93C22; }
+.pv-num { margin-left: 6px; font-weight: 800; color: #FFC93C; font-size: 15px; }
+.pv-types { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pv-types .pick { background: var(--paper); padding: 8px 2px; }
+.pv-types .pick:disabled { opacity: .35; }
+.preview-card .btn-sub { min-height: 44px; font-size: 15px; }
+.pv-pill { margin: 10px auto 0; display: block; background: var(--night2); color: var(--cream); border: 2px dashed #FFC93C; border-radius: 999px; padding: 9px 16px; font-size: 13.5px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.pv-pill.on { background: #FFC93C; color: #1B1230; border-style: solid; animation: bob 2.4s ease-in-out infinite; }
+.sheet.preview-card { max-width: 480px; margin: 0; border: 3px solid var(--night3); }

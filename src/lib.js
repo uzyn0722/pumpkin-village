@@ -39,6 +39,9 @@ export function saveOwned(slug, key, name) {
 }
 export function ownerKey(slug) { const o = ownedKeys()[slug]; return o ? o.key : null; }
 
+export function setRef(slug) { lsSet('pv_ref', slug); }
+export function getRef() { return lsGet('pv_ref', null); }
+
 export function neighbors() { return lsGet('pv_neighbors', []); }
 export function addNeighbor(slug, name) {
   const list = neighbors().filter((n) => n.slug !== slug);
@@ -66,6 +69,8 @@ const ERR = {
   bad_name: '이름은 1~12자로 써주세요',
   locked: '아직 열 수 있는 시간이 아니에요',
   not_owner: '바구니 주인만 할 수 있어요',
+  need_refs: '아직 친구 3명이 바구니를 만들지 않았어요',
+  no_candy: '그 사탕은 아직 없어요',
 };
 export function errMsg(e) {
   const m = (e && (e.message || e.details || '')) || '';

@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { rpc } from '../supabase.js';
 import { Pumpkin } from '../art.jsx';
 import { StickerTitle } from '../ui.jsx';
-import { saveOwned, errMsg } from '../lib.js';
+import { saveOwned, errMsg, getRef, deviceId, ownedKeys } from '../lib.js';
 
 const STYLES = [
   { v: 1, label: '하트눈' }, { v: 2, label: '별눈' }, { v: 3, label: '클래식' }, { v: 4, label: '선글라스' },
@@ -22,7 +22,7 @@ export default function Create() {
     if (!name.trim() || busy) return;
     setBusy(true); setErr('');
     try {
-      const r = await rpc('create_basket', { p_name: name.trim(), p_style: style, p_public: isPublic });
+      const r = await rpc('create_basket', { p_name: name.trim(), p_style: style, p_public: isPublic, p_ref: ownedKeys()[getRef()] ? null : getRef(), p_device: deviceId() });
       saveOwned(r.slug, r.admin_key, name.trim());
       nav(`/b/${r.slug}/share`, { replace: true, state: { fresh: true } });
     } catch (ex) { setErr(errMsg(ex)); setBusy(false); }

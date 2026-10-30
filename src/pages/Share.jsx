@@ -48,6 +48,7 @@ export default function Share() {
       </div>
       <StickerTitle size={32}>바구니 완성!</StickerTitle>
       <p className="sub">링크를 뿌리면 친구들이 사탕을 넣어줘요</p>
+      <p className="key-msg">🎁 내 링크로 들어온 친구 <b>3명이 바구니를 만들면</b><br />받은 쪽지 <b>1개를 미리</b> 열어볼 수 있어요</p>
       <div className="center-art"><BasketArt style={b ? b.style : 1} count={b ? b.candy_count : 0} size={180} /></div>
 
       <div className="stack">

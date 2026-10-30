@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Ghost, Pumpkin, Candy } from './art.jsx';
-import { STICKER_SHADOW, randomNick, hashNum } from './lib.js';
+import { randomNick, hashNum } from './lib.js';
 
 export function Toasts({ toasts }) {
   return (
@@ -12,8 +12,9 @@ export function Toasts({ toasts }) {
 
 export function StickerTitle({ children, size = 34, as: Tag = 'h1', className = '' }) {
   return (
-    <Tag className={`sticker-title ${className}`} style={{ fontSize: size, textShadow: STICKER_SHADOW }}>
-      {children}
+    <Tag className={`sticker-title ${className}`} style={{ fontSize: size }}>
+      <span className="st-back" aria-hidden="true">{children}</span>
+      <span className="st-front">{children}</span>
     </Tag>
   );
 }

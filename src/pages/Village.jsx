@@ -39,7 +39,7 @@ export default function Village({ me, openPicker, openHow }) {
     return m;
   }, [peers]);
 
-  const houses = useMemo(() => [...list].sort((a, b) => (viewers[b.slug] || 0) - (viewers[a.slug] || 0)), [list, viewers]);
+  const houses = useMemo(() => [...list].sort((a, b) => (a.is_official ? 1 : 0) - (b.is_official ? 1 : 0) || (viewers[b.slug] || 0) - (viewers[a.slug] || 0)), [list, viewers]);
   const here = peers.filter((p) => !p.at);
 
   useActs((p) => {

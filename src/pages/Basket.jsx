@@ -4,7 +4,7 @@ import { rpc } from '../supabase.js';
 import { BasketArt, Candy, Rainbow } from '../art.jsx';
 import { StickerTitle, Toasts, GhostCrowd, EmojiBar, LivePill, HowButton } from '../ui.jsx';
 import { useLive, useActs, useToasts, sendAct } from '../live.js';
-import { deviceId, ownerKey, saveOwned, useServerClock, fmtLeft, openLabel, errMsg, CANDY_NAMES } from '../lib.js';
+import { setRef, deviceId, ownerKey, saveOwned, useServerClock, fmtLeft, openLabel, errMsg, CANDY_NAMES } from '../lib.js';
 import { makeStory, shareOrDownload } from '../story.js';
 import NotFound from './NotFound.jsx';
 import AlertButton from '../AlertButton.jsx';
@@ -33,6 +33,7 @@ export default function Basket({ me, openHow }) {
           const ok = await rpc('verify_owner', { p_slug: slug, p_key: key });
           if (ok) { saveOwned(slug, key, basket.owner_name); if (alive) setOwner(true); }
         }
+        if (basket && !ownerKey(slug)) setRef(slug);
         if (k && !new URLSearchParams(loc.search).get('pwa')) nav(`/b/${slug}`, { replace: true });
       } catch { if (alive) setB(null); }
     })();
@@ -87,6 +88,7 @@ export default function Basket({ me, openHow }) {
           </div>
         )}
         {isOwner && !opened && <div className="alert-slot"><AlertButton slug={slug} ownerKey={ownerKey(slug)} /></div>}
+        {isOwner && !opened && <PreviewCard slug={slug} count={b.candy_count} onShare={() => nav(`/b/${slug}/share`)} />}
       </div>
 
       <section className="stage">
@@ -120,6 +122,82 @@ export default function Basket({ me, openHow }) {
         </div>
       </div>
     </main>
+  );
+}
+
+function PreviewCard({ slug, count, onShare }) {
+  const [st, setSt] = useState(null);
+  const [note, setNote] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+  useEffect(() => {
+    rpc('preview_status', { p_slug: slug, p_key: ownerKey(slug) }).then(setSt).catch(() => {});
+  }, [slug, count]);
+  if (!st) return null;
+  const refs = Math.min(st.refs, st.need);
+  const unlocked = st.refs >= st.need;
+  const pick = async (t) => {
+    setBusy(true); setErr('');
+    try { const c = await rpc('preview_candy', { p_slug: slug, p_key: ownerKey(slug), p_type: t }); setSt({ ...st, preview: c }); setOpen(false); setNote(c); } catch (e) { setErr(errMsg(e)); }
+    setBusy(false);
+  };
+  const label = st.preview ? '🎁 미리 본 쪽지 다시 보기' : unlocked ? '🎁 쪽지 1개 미리 열 수 있어요!' : `🎁 친구 3명이 바구니 만들면 쪽지 미리보기 ${refs}/3`;
+  return (
+    <>
+    <button type="button" className={`pv-pill ${unlocked ? 'on' : ''}`} onClick={() => (st.preview ? setNote(st.preview) : setOpen(true))}>{label}</button>
+    {open && (
+    <div className="sheet-back" role="dialog" aria-modal="true" aria-label="쪽지 미리보기" onClick={() => setOpen(false)}>
+    <div className="sheet preview-card" onClick={(e) => e.stopPropagation()}>
+      {st.preview ? (
+        <>
+          <b className="pv-title">🎁 미리 본 쪽지가 있어요</b>
+          <button type="button" className="btn-sub" onClick={() => setNote(st.preview)}>미리 본 쪽지 다시 보기</button>
+        </>
+      ) : unlocked ? (
+        <>
+          <b className="pv-title">🎁 쪽지 1개 미리 열기 성공!</b>
+          <span className="hint">사탕 종류를 고르면 그중 쪽지 1개가 열려요<br />딱 한 번만 고를 수 있어요</span>
+          <div className="pv-types">
+            {[1, 2, 3, 4].map((t) => {
+              const n = Number(st.types[t] || 0);
+              return (
+                <button key={t} type="button" className="pick" disabled={!n || busy} onClick={() => pick(t)} aria-label={`${CANDY_NAMES[t]} 사탕 열기`}>
+                  <Candy t={t} size={46} />
+                  <span className="pick-label">{t === 3 ? '고백 하트' : CANDY_NAMES[t]} {n}</span>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <>
+          <b className="pv-title">🎁 친구 3명이 내 링크로 바구니를 만들면<br />받은 쪽지 1개를 미리 열 수 있어요</b>
+          <span className="hint">보낸 사람과 쪽지 내용이 모두 보여요</span>
+          <div className="pv-dots" aria-label={`${refs}명 / 3명`}>
+            {[0, 1, 2].map((i) => <span key={i} className={i < refs ? 'on' : ''}>{i < refs ? '🎃' : ''}</span>)}
+            <span className="pv-num">{refs} / 3명</span>
+          </div>
+          <button type="button" className="btn-main" onClick={onShare}>친구들한테 링크 보내기</button>
+        </>
+      )}
+      {err && <p className="error">{err}</p>}
+      <button type="button" className="btn-text" onClick={() => setOpen(false)}>닫기</button>
+    </div>
+    </div>
+    )}
+      {note && (
+        <div className="sheet-back" role="dialog" aria-modal="true" aria-label="미리 본 쪽지" onClick={() => setNote(null)}>
+          <div className="sheet note" onClick={(e) => e.stopPropagation()}>
+            <Candy t={note.candy_type} size={80} />
+            <span className="note-from">{note.is_anonymous ? `익명 · ${note.sender_name}` : note.sender_name}</span>
+            <p className="note-text">{note.message}</p>
+            <p className="hint center">나머지 쪽지는 {'11월 1일 0시'}에 열려요</p>
+            <button type="button" className="btn-main" onClick={() => setNote(null)}>닫기</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
