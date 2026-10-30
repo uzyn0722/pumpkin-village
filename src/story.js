@@ -18,11 +18,9 @@ function basketSvg(style) {
   ${use(`pk${style}`, 8, 96, 224, 188)}`;
 }
 
-function sticker(ctx, text, x, y, size, fill = '#FF5FA2') {
-  ctx.font = `${size}px "Black Han Sans", sans-serif`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
-  ctx.strokeStyle = '#2B7BE4'; ctx.lineWidth = size * 0.34; ctx.strokeText(text, x, y);
-  ctx.strokeStyle = '#FFC93C'; ctx.lineWidth = size * 0.17; ctx.strokeText(text, x, y);
+function title(ctx, text, x, y, size, fill = '#FF6FAE') {
+  ctx.font = `900 ${size}px "Noto Sans KR", sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = fill; ctx.fillText(text, x, y);
 }
 
@@ -39,7 +37,7 @@ function roundRect(ctx, x, y, w, h, r) {
 
 // kind: 'invite' | 'result'
 export async function makeStory({ kind, name, count, style = 1, openText, url }) {
-  try { await Promise.all([document.fonts.load('80px "Black Han Sans"'), document.fonts.load('60px Shrikhand'), document.fonts.load('700 40px "Noto Sans KR"')]); } catch { /* fallback fonts */ }
+  try { await Promise.all([document.fonts.load('900 80px "Noto Sans KR"'), document.fonts.load('60px Shrikhand'), document.fonts.load('700 40px "Noto Sans KR"')]); } catch { /* fallback fonts */ }
   const W = 1080; const H = 1920;
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const ctx = c.getContext('2d');
@@ -52,7 +50,7 @@ export async function makeStory({ kind, name, count, style = 1, openText, url })
   // logo
   ctx.font = '56px Shrikhand, serif'; ctx.fillStyle = '#FFC93C'; ctx.textAlign = 'center';
   ctx.fillText('Halloween', W / 2, 200);
-  sticker(ctx, '호박마을', W / 2, 320, 112);
+  title(ctx, '호박마을', W / 2, 320, 112, '#FF6FAE');
 
   // main card
   const cx = 120; const cy = 430; const cw = W - 240; const ch = 1060;
@@ -66,26 +64,28 @@ export async function makeStory({ kind, name, count, style = 1, openText, url })
   for (let i = 0; i < cw / 40 + 1; i++) { ctx.fillStyle = i % 2 ? '#FFC93C' : '#FF5FA2'; ctx.fillRect(cx + i * 40, cy, 40, 40); ctx.fillStyle = i % 2 ? '#FF5FA2' : '#FFC93C'; ctx.fillRect(cx + i * 40, cy + 40, 40, 40); }
   ctx.restore();
 
-  ctx.fillStyle = '#3A2E3A'; ctx.textAlign = 'center';
-  const line1 = kind === 'result' ? `${name}는 할로윈에` : `${name}의`;
-  const s1 = fitSize(ctx, line1, cw - 120, 84, (s) => `${s}px "Black Han Sans", sans-serif`);
-  ctx.font = `${s1}px "Black Han Sans", sans-serif`; ctx.fillText(line1, W / 2, cy + 200);
-  const line2 = kind === 'result' ? `사탕 ${count}개!` : '사탕 바구니';
-  sticker(ctx, line2, W / 2, cy + 330, 120);
+  const fit = (text, max, start, weight = 900) => fitSize(ctx, text, max, start, (z) => `${weight} ${z}px "Noto Sans KR", sans-serif`);
+  ctx.textAlign = 'center';
+  const top = kind === 'result' ? `${name}의 사탕 바구니` : count > 0 ? `${name}의 바구니 · 벌써 사탕 ${count}개` : `${name}의 사탕 바구니`;
+  ctx.fillStyle = '#7A6B7F'; ctx.font = `700 ${fit(top, cw - 140, 46, 700)}px "Noto Sans KR", sans-serif`; ctx.fillText(top, W / 2, cy + 170);
+  const h1 = kind === 'result' ? '할로윈에' : '할로윈 끝나기 전에';
+  const h2 = kind === 'result' ? `사탕 ${count}개 받았어!` : '사탕 넣어줘 🍬';
+  title(ctx, h1, W / 2, cy + 272, fit(h1, cw - 120, 88), '#3A2E3A');
+  title(ctx, h2, W / 2, cy + 392, fit(h2, cw - 100, 112), '#FF4F9A');
 
   try {
     const basket = await svgImage(basketSvg(style), 240, 290);
-    ctx.drawImage(basket, W / 2 - 207, cy + 370, 414, 500);
+    ctx.drawImage(basket, W / 2 - 170, cy + 420, 340, 411);
   } catch { /* art is best-effort */ }
 
-  ctx.fillStyle = '#3A2E3A'; ctx.font = '700 46px "Noto Sans KR", sans-serif';
-  if (kind === 'result') {
-    ctx.fillText('받았어요 🎃', W / 2, cy + 940);
-  } else {
-    ctx.fillText('쪽지 사탕 넣어줘!', W / 2, cy + 920);
-    ctx.font = '500 34px "Noto Sans KR", sans-serif'; ctx.fillStyle = '#7A6B7F';
-    ctx.fillText(count > 0 ? `지금 사탕 ${count}개 · ${openText}에 다 같이 열어요` : `${openText}에 다 같이 열어요`, W / 2, cy + 985);
-  }
+  const sub = kind === 'result' ? '11월 1일 0시, 다 같이 열었어요 🎃' : '익명 쪽지 OK · 고백도 OK 👻';
+  ctx.fillStyle = '#3A2E3A'; ctx.font = `700 ${fit(sub, cw - 120, 44, 700)}px "Noto Sans KR", sans-serif`; ctx.fillText(sub, W / 2, cy + 890);
+  const pill = kind === 'result' ? '너도 호박마을에서 바구니 만들어봐' : `⏰ ${openText || '11월 1일 0시'} 마감 · 그때 다 같이 열어요`;
+  const ps = fit(pill, cw - 160, 36);
+  ctx.font = `900 ${ps}px "Noto Sans KR", sans-serif`;
+  const pw = ctx.measureText(pill).width + 80;
+  roundRect(ctx, W / 2 - pw / 2, cy + 925, pw, 84, 42); ctx.fillStyle = '#FFC93C'; ctx.fill();
+  ctx.fillStyle = '#3A2E3A'; ctx.fillText(pill, W / 2, cy + 980);
   ctx.restore();
 
   // sticker collage around the card

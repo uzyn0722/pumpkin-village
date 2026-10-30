@@ -51,12 +51,10 @@ a { color: var(--yellow); }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(63,191,106,.25); flex: none; }
 
 .sticker-title {
-  font-family: var(--display); font-weight: 400; color: var(--pink); margin: 6px 0 2px;
-  line-height: 1.25; letter-spacing: 1px; padding: .14em .12em .2em; display: grid;
+  font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: #FFD84A; margin: 6px 0 2px;
+  line-height: 1.25; letter-spacing: -.02em; padding: 0; word-break: keep-all;
 }
-.sticker-title > span { grid-area: 1 / 1; position: relative; }
-.st-back { color: var(--blue); -webkit-text-stroke: .22em var(--blue); filter: drop-shadow(0 .09em 0 #0D0820); }
-.st-front { color: #FF6FAE; }
+.logo .sticker-title { color: #FF6FAE; }
 .sub { margin: 0; color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1.55; }
 .hint { margin: 4px 0 0; color: #8E7F96; font-size: 12.5px; line-height: 1.5; }
 .card .hint, .sheet .hint { color: #7A6B7F; }

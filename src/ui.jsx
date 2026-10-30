@@ -13,8 +13,7 @@ export function Toasts({ toasts }) {
 export function StickerTitle({ children, size = 34, as: Tag = 'h1', className = '' }) {
   return (
     <Tag className={`sticker-title ${className}`} style={{ fontSize: size }}>
-      <span className="st-back" aria-hidden="true">{children}</span>
-      <span className="st-front">{children}</span>
+      {children}
     </Tag>
   );
 }
