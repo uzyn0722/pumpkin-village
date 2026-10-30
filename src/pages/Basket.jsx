@@ -7,6 +7,7 @@ import { useLive, useActs, useToasts, sendAct } from '../live.js';
 import { deviceId, ownerKey, saveOwned, useServerClock, fmtLeft, openLabel, errMsg, CANDY_NAMES } from '../lib.js';
 import { makeStory, shareOrDownload } from '../story.js';
 import NotFound from './NotFound.jsx';
+import AlertButton from '../AlertButton.jsx';
 
 export default function Basket({ me }) {
   const { slug } = useParams();
@@ -32,7 +33,7 @@ export default function Basket({ me }) {
           const ok = await rpc('verify_owner', { p_slug: slug, p_key: key });
           if (ok) { saveOwned(slug, key, basket.owner_name); if (alive) setOwner(true); }
         }
-        if (k) nav(`/b/${slug}`, { replace: true });
+        if (k && !new URLSearchParams(loc.search).get('pwa')) nav(`/b/${slug}`, { replace: true });
       } catch { if (alive) setB(null); }
     })();
     return () => { alive = false; };
@@ -78,6 +79,7 @@ export default function Basket({ me }) {
         <StickerTitle size={32}>{b.owner_name}의 사탕 바구니</StickerTitle>
         <p className="sub">{opened ? '바구니가 열렸어요!' : `${openLabel(b.open_at)}에 열려요 · ${fmtLeft(openAt - now)} 남음`}</p>
         {b.is_official && <span className="badge big">호박마을 주민</span>}
+        {isOwner && !opened && <div className="alert-slot"><AlertButton slug={slug} ownerKey={ownerKey(slug)} /></div>}
       </div>
 
       <section className="stage">

@@ -36,7 +36,7 @@ export function BasketArt({ style = 1, count = 0, size = 240 }) {
   const n = Math.min(3, count === 0 ? 0 : count < 3 ? 1 : count < 8 ? 2 : 3);
   const s = size / 240;
   return (
-    <svg width={size} height={size} viewBox="0 0 240 240" aria-hidden="true">
+    <svg width={size} height={Math.round(size * 290 / 240)} viewBox="0 0 240 290" aria-hidden="true">
       <path d="M44 120Q120 -10 196 120" stroke="#2B7BE4" strokeWidth="20" fill="none" strokeLinecap="round" />
       <path d="M44 120Q120 -10 196 120" stroke="#FF5FA2" strokeWidth="9" fill="none" strokeLinecap="round" />
       {n >= 2 && <g transform="translate(58 66) rotate(-18 30 26)"><use href="#ck3" width="64" height="55" /></g>}

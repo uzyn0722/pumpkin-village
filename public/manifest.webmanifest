@@ -1,0 +1,11 @@
+{
+  "name": "할로윈 호박마을",
+  "short_name": "호박마을",
+  "display": "standalone",
+  "background_color": "#1E1430",
+  "theme_color": "#1E1430",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

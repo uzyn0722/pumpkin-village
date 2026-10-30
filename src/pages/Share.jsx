@@ -5,6 +5,7 @@ import { BasketArt } from '../art.jsx';
 import { StickerTitle } from '../ui.jsx';
 import { ownerKey, openLabel } from '../lib.js';
 import { makeStory, shareOrDownload } from '../story.js';
+import AlertButton from '../AlertButton.jsx';
 
 async function copy(text) {
   try { await navigator.clipboard.writeText(text); return true; } catch {
@@ -67,6 +68,12 @@ export default function Share() {
             <li><span className="step-n">3</span><span>링크 스티커에 내 바구니 링크 붙이기</span></li>
           </ol>
           <button type="button" className="btn-sub wide" onClick={doStory} disabled={making || !b}>{making ? '만드는 중…' : '스토리 이미지 저장'}</button>
+        </div>
+
+        <div className="card">
+          <span className="field-label">사탕 도착 알림</span>
+          <p className="hint">누가 사탕을 넣으면 폰으로 알려드려요</p>
+          <AlertButton slug={slug} ownerKey={key} />
         </div>
 
         <div className="card warn">
